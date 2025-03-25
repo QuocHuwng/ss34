@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .form-container {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        input,
+        select {
+            padding: 10px;
+            width: 150px;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Task Management</h1>
+    <div class="form-container">
+        <input type="text" id="taskContent" placeholder="Content">
+        <input type="date" id="taskDueDate">
+        <select id="taskStatus">
+            <option value="">Choose status</option>
+            <option value="Pending">Pending</option>
+            <option value="Completed">Completed</option>
+        </select>
+        <input type="text" id="assignedTo" placeholder="Username">
+        <button onclick="addTask()">Submit</button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Content</th>
+                <th>Due date</th>
+                <th>Status</th>
+                <th>Assigned to</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="taskTableBody">
+        </tbody>
+    </table>
+
+    <script>
+        let courses = [
+            {
+                id: 1,
+                content: 'Learn Javascript Session 01',
+                dueDate: '2023-04-17',
+                status: 'Pending',
+                assignedTo: 'Anh Bách',
+            },
+            {
+                id: 2,
+                content: 'Learn Javascript Session 02',
+                dueDate: '2023-04-17',
+                status: 'Pending',
+                assignedTo: 'Lâm thì`',
+            },
+            {
+                id: 3,
+                content: 'Learn CSS Session 1',
+                dueDate: '2023-04-17',
+                status: 'Pending',
+                assignedTo: 'Hiếu Ci ớt ớt',
+            },
+        ];
+
+        function renderData() {
+            let rowElement = "";
+            for (let i = 0; i < courses.length; i++) {
+                rowElement += `<tr>  
+                    <td>${i + 1}</td>  
+                    <td>${courses[i].content}</td>  
+                    <td>${courses[i].dueDate}</td>  
+                    <td>${courses[i].status}</td>  
+                    <td>${courses[i].assignedTo}</td>  
+                    <td>  
+                        <button onclick="editTask(${i})">Sửa</button>  
+                        <button onclick="deleteTask(${i})">Xóa</button>  
+                    </td>  
+                </tr>`;
+            }
+            document.getElementById("taskTableBody").innerHTML = rowElement;
+        }
+
+        function addTask() {
+            let content = document.getElementById('taskContent').value;
+            let dueDate = document.getElementById('taskDueDate').value;
+            let status = document.getElementById('taskStatus').value;
+            let assignedTo = document.getElementById('assignedTo').value;
+
+            if (content && dueDate && status && assignedTo) {
+                courses.push({
+                    id: courses.length + 1,  
+                    content,
+                    dueDate,
+                    status,
+                    assignedTo
+                });
+                renderData();
+                clearForm();
+            } else {
+                alert('Please fill out all fields.');
+            }
+        }
+
+        function deleteTask(index) {
+            courses.splice(index, 1);
+            renderData();
+        }
+
+        function clearForm() {
+            document.getElementById('taskContent').value = '';
+            document.getElementById('taskDueDate').value = '';
+            document.getElementById('taskStatus').value = '';
+            document.getElementById('assignedTo').value = '';
+        }
+
+        function editTask(index) {
+
+        }
+
+        renderData();  
+    </script>
+</body>
+
+</html>

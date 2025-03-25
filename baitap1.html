@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+</head>
+
+<body>
+    <h2>Đăng Ký Tài Khoản</h2>
+
+    <input type="email" id="email" required>
+    <input type="password" id="password"required>
+    <input type="password" id="confirmPassword"required>
+    <button onclick="register()">Đăng Ký</button>
+
+    <script>
+        function register() {
+            let emailElement;
+            let passwordElement;
+            let confirmPasswordElement;
+
+            emailElement = document.getElementById("email").value.trim();
+            passwordElement = document.getElementById("password").value.trim();
+            confirmPasswordElement = document.getElementById("confirmPassword").value.trim();
+
+            if (passwordElement !== confirmPasswordElement) {
+                alert("Mật khẩu xác nhận không khớp!");
+                return;
+            }
+
+            let users = JSON.parse(localStorage.getItem("users")) || [];
+
+            let findAccount = users.find(item => item.email === emailElement);
+            if (findAccount) {
+                alert("Email đã tồn tại!");
+                return;
+            }
+
+            let newUser = {
+                email: emailElement,
+                password: passwordElement
+            };
+
+            users.push(newUser);
+            localStorage.setItem("users", JSON.stringify(users));
+            alert("Đăng ký thành công!");
+        }  
+    </script>
+</body>
+</html>

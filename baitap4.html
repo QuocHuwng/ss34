@@ -1,34 +1,127 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        body {
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .todo-container {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            width: 300px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 24px;
+        }
+
+        input {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+  
+
+        li {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .red-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+          
+        }
+
+        .red-btn:hover {
+            background-color: #c82333;
+        }
+    </style>
 </head>
 
 <body>
-    <h1>trang đăng nhập</h1>
-    <label for="">email</label>
-    <input id="email" type="text"> <br>
-    <label for="">mật khẩu</label>
-    <input id="password" type="text">
-    <button onclick="login()">login</button>
+    <div class="todo-container">
+        <h1>Todo List</h1>
+        <input type="text" id="todo-input" placeholder="Thêm việc cần làm...">
+        <button id="add-todo">Thêm</button>
+        <ul id="todo-list"></ul>
+    </div>
+
     <script>
-        let users = JSON.parse(localStorage.getItem("users")) || [];
-        function login() {
-            let email = document.getElementById("email").value;
-            let pass = document.getElementById("password").value;
-            for (let i = 0; i < users.length; i++) {
-                if (users[i].email == email && users[i].pass == pass) {
-                    console.log("thành công");
+        document.addEventListener("DOMContentLoaded", () => {
+            const todoInput = document.getElementById("todo-input");
+            const addTodoButton = document.getElementById("add-todo");
+            const todoList = document.getElementById("todo-list");
 
-                    return;
-                }
+            function loadTodos() {
+                const todos = JSON.parse(localStorage.getItem("todos")) || [];
+                todos.forEach(todo => addTodoToList(todo));
             }
-            console.log("tên đăng nhập hoặc mật khẩu không đúng");
 
-        }
+            function addTodoToList(todo) {
+                const li = document.createElement("li");
+                li.textContent = todo;
+                const deleteButton = document.createElement("button");
+                deleteButton.textContent = "Xóa";
+                deleteButton.className = "red-btn";
+                deleteButton.onclick = () => {
+                    li.remove();
+                    deleteTodo(todo);
+                };
+                li.appendChild(deleteButton);
+                todoList.appendChild(li);
+            }
+
+            function deleteTodo(todo) {
+                const todos = JSON.parse(localStorage.getItem("todos")) || [];
+                const updatedTodos = todos.filter(t => t !== todo);
+                localStorage.setItem("todos", JSON.stringify(updatedTodos));
+            }
+
+            addTodoButton.addEventListener("click", () => {
+                const todoText = todoInput.value.trim();
+                if (todoText) {
+                    addTodoToList(todoText);
+                    const todos = JSON.parse(localStorage.getItem("todos")) || [];
+                    todos.push(todoText);
+                    localStorage.setItem("todos", JSON.stringify(todos));
+                    todoInput.value = "";
+                }
+            });
+
+            loadTodos();
+        });  
     </script>
 </body>
 
